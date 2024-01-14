@@ -1,0 +1,51 @@
+@startmindmap opsintel mind map
+
+
+* Debian
+** Ubuntu
+*** Linux Mint
+*** Kubuntu
+*** Lubuntu
+*** KDE Neon
+** LMDE
+** SolydXK
+** SteamOS
+** Raspbian with a very long name
+*** <s>Raspmbc</s> => OSMC
+*** <s>Raspyfi</s> => Volumio
+
+@endmindmap
+
+
+
+@startuml "Automation Layers"
+
+rectangle "Station Logic Layer" {
+    rectangle "State Transition Logic" as stran
+    rectangle "State Output Logic" as sout
+    rectangle "Communication Tx" as commtx
+    stran -right-> sout : next state
+    sout -right-> commtx : next state
+}
+
+rectangle "Logical Device Layer\t" {
+    rectangle "Logical Sensors" as lsense
+    rectangle "Logical Actuators" as lact
+    lsense -right-> lact : actuation feedback
+}
+
+rectangle "\t\tDevice Layer" {
+    rectangle "Physical Sensors" as psense
+    rectangle "Communication Rx" as commrx
+    rectangle "Physical Actuators" as pact
+}
+
+
+lact -down-> pact : actuation commands
+commrx -right-> lsense : external state
+psense -up-> lsense : sensor readings
+lsense -up-> stran : conditioned\nboolean\nsensor values
+sout -down-> lact : desired\nextend/retract\ncommands
+lact -up-> stran : faults
+
+@enduml
